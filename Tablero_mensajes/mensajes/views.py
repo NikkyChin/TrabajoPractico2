@@ -1,33 +1,48 @@
-from django.shortcuts import render, redirect
+# mensajes/views.py
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Mensaje
-from .forms import MensajeForm
+from .forms import MensajeForm, FiltroMensajeForm
 
-# Crear mensajes
 def crear_mensaje(request):
     if request.method == 'POST':
         form = MensajeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('mensajes_recibidos')
+            return redirect('mensajes:ver_recibidos')
     else:
         form = MensajeForm()
-    return render(request, 'mensajes/crear_mensaje.html', {'form': form})
+    return render(request, 'crear_mensaje.html', {'form': form})
 
-# Mensajes enviados
-def mensajes_enviados(request):
-    # Filtrar por un remitente específico
-    mensajes = Mensaje.objects.filter(remitente='Juan')  # Ajustar según el remitente deseado
-    return render(request, 'mensajes/mensajes_enviados.html', {'mensajes': mensajes})
+def ver_mensajes_recibidos(request):
+    form = FiltroMensajeForm(request.GET)
+    if form.is_valid():
+        nombre = form.cleaned_data.get('nombre')
+        if nombre:
+            mensajes = Mensaje.objects.filter(destinatario=nombre)
+        else:
+            mensajes = Mensaje.objects.filter(destinatario=request.user.username)
+    else:
+        mensajes = Mensaje.objects.filter(destinatario=request.user.username)
+    
+    return render(request, 'ver_mensajes_recibidos.html', {'mensajes': mensajes, 'form': form})
 
-# Mensajes recibidos
-def mensajes_recibidos(request):
-    # Filtrar por un destinatario específico
-    mensajes = Mensaje.objects.filter(destinatario='Pedro')  # Ajustar según el destinatario deseado
-    return render(request, 'mensajes/mensajes_recibidos.html', {'mensajes': mensajes})
+def ver_mensajes_enviados(request):
+    form = FiltroMensajeForm(request.GET)
+    if form.is_valid():
+        nombre = form.cleaned_data.get('nombre')
+        if nombre:
+            mensajes = Mensaje.objects.filter(remitente=nombre)
+        else:
+            mensajes = Mensaje.objects.filter(remitente=request.user.username)
+    else:
+        mensajes = Mensaje.objects.filter(remitente=request.user.username)
+    
+    return render(request, 'ver_mensajes_enviados.html', {'mensajes': mensajes, 'form': form})
 
-
-# eliminar mensajes
-def eliminar_mensaje(request, mensaje_id):
-    mensaje = Mensaje.objects.get(id=mensaje_id)
+def eliminar_mensaje(request, id):
+    mensaje = get_object_or_404(Mensaje, id=id)
     mensaje.delete()
-    return redirect('mensajes_recibidos')
+    return redirect('mensajes:ver_recibidos')
+
+def index(request):
+    return render(request, 'base.html')

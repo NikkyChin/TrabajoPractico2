@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Mensajes Enviados{% endblock %}
+
+{% block content %}
+<h2>Mensajes Enviados</h2>
+<form method="get" class="mb-4">
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+</form>
+<ul>
+    {% for mensaje in mensajes %}
+    <li>
+        {{ mensaje.texto }} - Para: {{ mensaje.destinatario }} - Fecha: {{ mensaje.fecha_envio }}
+        <a href="{% url 'mensajes:eliminar_mensaje' mensaje.id %}">Eliminar</a>
+    </li>
+    {% empty %}
+    <li>No has enviado mensajes.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,43 +1,26 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Tablero de Mensajes{% endblock %}</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Tu CSS -->
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Tablero de Mensajes</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'crear_mensaje' %}">Crear Mensaje</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'mensajes_recibidos' %}">Mensajes Recibidos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'mensajes_enviados' %}">Mensajes Enviados</a>
-                    </li>
-                </ul>
-            </div>
+        <h1>Tablero de Mensajes</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'mensajes:crear_mensaje' %}">Crear Mensaje</a></li>
+                <li><a href="{% url 'mensajes:ver_recibidos' %}">Ver Mensajes Recibidos</a></li>
+                <li><a href="{% url 'mensajes:ver_enviados' %}">Ver Mensajes Enviados</a></li>
+            </ul>
         </nav>
     </header>
-    <main class="container mt-4">
+    <main>
         {% block content %}
         {% endblock %}
     </main>
-    <footer class="bg-light text-center py-3 mt-4">
+    <footer>
         <p>&copy; 2024 Tablero de Mensajes</p>
     </footer>
-    <!-- Bootstrap JS y dependencias -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
