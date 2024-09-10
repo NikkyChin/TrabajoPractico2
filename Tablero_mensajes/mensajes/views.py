@@ -1,9 +1,8 @@
-# mensajes/views.py
 from django.shortcuts import render, redirect
 from .models import Mensaje
 from .forms import MensajeForm
 
-# crear mensajes
+# Crear mensajes
 def crear_mensaje(request):
     if request.method == 'POST':
         form = MensajeForm(request.POST)
@@ -14,15 +13,18 @@ def crear_mensaje(request):
         form = MensajeForm()
     return render(request, 'mensajes/crear_mensaje.html', {'form': form})
 
-# mensajes enviados
+# Mensajes enviados
 def mensajes_enviados(request):
-    mensajes = Mensaje.objects.filter(remitente='Juan')  # Ajustar para filtrar por el usuario logueado
+    # Filtrar por un remitente específico
+    mensajes = Mensaje.objects.filter(remitente='Juan')  # Ajustar según el remitente deseado
     return render(request, 'mensajes/mensajes_enviados.html', {'mensajes': mensajes})
 
-# mensajes recibidos
+# Mensajes recibidos
 def mensajes_recibidos(request):
-    mensajes = Mensaje.objects.filter(destinatario='pedro')  # Aquí se puede ajustar para que filtre por el usuario logueado
+    # Filtrar por un destinatario específico
+    mensajes = Mensaje.objects.filter(destinatario='Pedro')  # Ajustar según el destinatario deseado
     return render(request, 'mensajes/mensajes_recibidos.html', {'mensajes': mensajes})
+
 
 # eliminar mensajes
 def eliminar_mensaje(request, mensaje_id):
